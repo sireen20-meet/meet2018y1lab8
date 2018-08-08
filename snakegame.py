@@ -116,6 +116,31 @@ turtle.onkeypress(left, LEFT_ARROW)# Create listener for up key
 
 turtle.listen()
 
+
+#######################makefood
+
+def make_food():
+    #The screen positions go from -SIZE/2 to +SIZE/2
+    #But we need to make food pieces only appear on game squares
+    #So we cut up the game board into multiples of SQUARE_SIZE.
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    
+    #Pick a position that is a random multiple of SQUARE_SIZE
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+    food.goto(food_x,food_y)
+    food_pos.append((food_x,food_y))
+    food_stamps.append(food.stamp())
+    
+
+    ##1.WRITE YOUR CODE HERE: Make the food turtle go to the randomly-generated
+    ##                        position 
+    ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
+    ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
+
 def move_snake():
 
     ######## SPECIAL PLACE - Remember it for Part 5
@@ -128,8 +153,17 @@ def move_snake():
         food_pos.pop(food_ind) #Remove eaten food position
         food_stamps.pop(food_ind) #Remove eaten food stamp
         print("You have eaten the food!")
+        make_food()
 
+        #333333333333
+        
+       
+    
+        ############################################################################
 
+    if snake.pos() in pos_list[:-1] :
+        snake_ind = pos_list.index(snake.pos()) #What does this do? 
+        quit()
     
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -153,17 +187,34 @@ def move_snake():
 
     #Stamp new element and append new stamp in list
     #Remember: The snake position changed - update my_pos()
-
+    if snake.pos() in food_pos:
+        my_pos=snake.pos() 
+        pos_list.append(my_pos)
+        new_stamp = snake.stamp()
+        stamp_list.append(new_stamp)
+    ######## SPECIAL PLACE - Remember it for Part 5
+    #pop zeroth element in pos_list to get rid of last the last 
+    #piece of the tail
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        
+    else:
+       
+    ######## SPECIAL PLACE - Remember it for Part 5
+    #pop zeroth element in pos_list to get rid of last the last 
+    #piece of the tail
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        pos_list.pop(0)
     my_pos=snake.pos() 
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp)
-    ######## SPECIAL PLACE - Remember it for Part 5
-    #pop zeroth element in pos_list to get rid of last the last 
-    #piece of the tail
-    old_stamp = stamp_list.pop(0)
-    snake.clearstamp(old_stamp)
-    pos_list.pop(0)
+   
+       
+    
+    
+        
 
     #Add new lines to the end of the function
     #Grab position of snake
@@ -212,29 +263,7 @@ def move_snake():
         
     turtle.ontimer(move_snake,TIME_STEP)
 
-#######################makefood
 
-def make_food():
-    #The screen positions go from -SIZE/2 to +SIZE/2
-    #But we need to make food pieces only appear on game squares
-    #So we cut up the game board into multiples of SQUARE_SIZE.
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
-    
-    #Pick a position that is a random multiple of SQUARE_SIZE
-    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
-    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
-    food.goto(food_x,food_y)
-
-
-        ##1.WRITE YOUR CODE HERE: Make the food turtle go to the randomly-generated
-        ##                        position 
-        ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
-        ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
-
-    
 move_snake()
 
 turtle.register_shape("trash.gif") #Add trash picture
@@ -255,9 +284,8 @@ food_stamps = []
 #3. saves the stamp by appending it to the food_stamps list using
 # food_stamps.append(    )
 #4. Don’t forget to hide the food turtle!
+
 for this_food_pos in food_pos :
-    ####WRITE YOUR CODE HERE!!
     food.goto(this_food_pos)
-    #food.stamp()
     food_stamps.append(food.stamp())
     
