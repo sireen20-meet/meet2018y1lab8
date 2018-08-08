@@ -1,13 +1,45 @@
 import turtle
 import random #We'll need this later in the lab
+turtle.bgcolor("black")
+
+
+
+
+
+
+
+lines = turtle.clone()
+
+
+lines.penup()
+
+
+lines.hideturtle()
+
+lines.goto(0,300)
+lines.pendown()
+lines.pencolor("white")
+lines.write("Snake game!", align='center', font=("Arial",20,"normal"))
+lines.penup()
+lines.goto(0,250)
+lines.pendown()
+lines.goto(400,250)
+lines.goto(400,-250)
+lines.goto(-400,-250)
+lines.goto(-400,250)
+lines.goto(0,250)
+lines.penup()
+
 
 turtle.tracer(1,0) #This helps the turtle move more smoothly
 
 SIZE_X=800
 SIZE_Y=500
-turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window  
-                             #size. 
+turtle.setup(1000, 1000)  #Curious? It's the turtle window  
+
+
 turtle.penup()
+
 
 SQUARE_SIZE = 20
 START_LENGTH = 6
@@ -20,7 +52,9 @@ food_stamps = []
 
 #Set up positions (x,y) of boxes that make up the snake
 snake = turtle.clone()
+snake.pencolor("yellow")
 snake.shape("square")
+
 
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
@@ -141,10 +175,14 @@ def make_food():
     ##2.WRITE YOUR CODE HERE: Add the food turtle's position to the food positions list
     ##3.WRITE YOUR CODE HERE: Add the food turtle's stamp to the food stamps list
 
+i=0
+score=turtle.clone()
+score.pencolor("white")
 def move_snake():
 
     ######## SPECIAL PLACE - Remember it for Part 5
     global food_stamps, food_pos
+    
     #If snake is on top of food item
     if snake.pos() in food_pos:
         food_ind=food_pos.index(snake.pos()) #What does this do?
@@ -154,16 +192,30 @@ def move_snake():
         food_stamps.pop(food_ind) #Remove eaten food stamp
         print("You have eaten the food!")
         make_food()
-
-        #333333333333
         
-       
+        global i
+        i = i + 1
+        print(i)
+        score.penup()
+        score.goto(-400,-250)
+        score.pendown()
+        score.clear()
+        score.write(i, font=("Arial", 18, "normal"))
+    
+    else:
+    ######## SPECIAL PLACE - Remember it for Part 5
+    #pop zeroth element in pos_list to get rid of last the last 
+    #piece of the tail
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        pos_list.pop(0)
+        
+        #333333333333
+    
     
         ############################################################################
 
-    if snake.pos() in pos_list[:-1] :
-        snake_ind = pos_list.index(snake.pos()) #What does this do? 
-        quit()
+    
     
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -184,9 +236,12 @@ def move_snake():
         print("You moved down!")
     #4. Write the conditions for UP and DOWN on your own
     ##### YOUR CODE HERE
-
+    if snake.pos() in pos_list[:-1] :
+        snake_ind = pos_list.index(snake.pos()) #What does this do? 
+        quit()
     #Stamp new element and append new stamp in list
     #Remember: The snake position changed - update my_pos()
+        '''
     if snake.pos() in food_pos:
         my_pos=snake.pos() 
         pos_list.append(my_pos)
@@ -198,14 +253,12 @@ def move_snake():
         old_stamp = stamp_list.pop(0)
         snake.clearstamp(old_stamp)
         
-    else:
-       
-    ######## SPECIAL PLACE - Remember it for Part 5
-    #pop zeroth element in pos_list to get rid of last the last 
-    #piece of the tail
-        old_stamp = stamp_list.pop(0)
-        snake.clearstamp(old_stamp)
-        pos_list.pop(0)
+        lines.write(i)
+        '''
+    
+
+    
+    
     my_pos=snake.pos() 
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
@@ -238,7 +291,7 @@ def move_snake():
     elif new_x_pos <= LEFT_EDGE:
         print("You hit the left edge! Game over!")
         quit()
-
+        
 #Add new lines to the end of the function
     #Grab position of snake
 
@@ -262,6 +315,10 @@ def move_snake():
     
         
     turtle.ontimer(move_snake,TIME_STEP)
+
+
+
+
 
 
 move_snake()
